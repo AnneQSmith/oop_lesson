@@ -21,6 +21,17 @@ class Rock(GameElement):
 class Character(GameElement):
     IMAGE = "Horns"
 
+    def next_pos(self, direction):
+        if direction == 'up':
+            return (self.x, max(self.y-1,0))
+        elif direction == "down":
+            return (self.x, min(self.y+1, GAME_HEIGHT-1))
+        elif direction == 'left':
+            return (max (0, self.x-1), self.y)
+        elif direction=='right':
+            return (min (self.x+1, GAME_WIDTH-1), self.y)
+        return None
+
 
 
 ####   End class definitions    ####
@@ -54,34 +65,29 @@ def initialize():
 
 def keyboard_handler():
 
+    direction = None
+
     if KEYBOARD[key.UP]:
-        GAME_BOARD.draw_msg("You pressed up")
-        next_y = max(PLAYER.y - 1, 0)
-        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
-        GAME_BOARD.set_el(PLAYER.x, next_y, PLAYER)
+        direction = 'up'
 
     elif KEYBOARD[key.DOWN]:
-        GAME_BOARD.draw_msg("You pressed down")
-        next_y = min(PLAYER.y + 1, GAME_HEIGHT - 1)
-        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
-        GAME_BOARD.set_el(PLAYER.x, next_y, PLAYER)
+        direction = 'down'
 
     elif KEYBOARD[key.RIGHT]:
-        GAME_BOARD.draw_msg("You pressed right")
-        next_x = min (PLAYER.x + 1, GAME_WIDTH - 1)
-        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
-        GAME_BOARD.set_el(next_x, PLAYER.y, PLAYER)
+        direction = 'right'
 
     elif KEYBOARD[key.LEFT]:
-        GAME_BOARD.draw_msg("You pressed left")
-        next_x = max (PLAYER.x - 1, 0)
-        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
-        GAME_BOARD.set_el(next_x, PLAYER.y, PLAYER)
+        direction = 'left'
 
     elif KEYBOARD[key.QUESTION]:
         GAME_BOARD.draw_msg("Sorry you are beyond help")
     elif KEYBOARD[key.SPACE]:
         GAME_BOARD.erase_msg()
 
+    if direction:
+        next_location = PLAYER.next_pos(direction)
+        next_x = next_location[0]
+        next_y = next_location[1]
 
-
+        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
+        GAME_BOARD.set_el(next_x, next_y, PLAYER)
