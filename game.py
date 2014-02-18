@@ -49,3 +49,39 @@ def initialize():
     print PLAYER
 
 
+    GAME_BOARD.draw_msg("This game is wicked awesome.")
+
+
+def keyboard_handler():
+
+    if KEYBOARD[key.UP]:
+        GAME_BOARD.draw_msg("You pressed up")
+        next_y = max(PLAYER.y - 1, 0)
+        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
+        GAME_BOARD.set_el(PLAYER.x, next_y, PLAYER)
+
+    elif KEYBOARD[key.DOWN]:
+        GAME_BOARD.draw_msg("You pressed down")
+        next_y = min(PLAYER.y + 1, GAME_HEIGHT - 1)
+        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
+        GAME_BOARD.set_el(PLAYER.x, next_y, PLAYER)
+
+    elif KEYBOARD[key.RIGHT]:
+        GAME_BOARD.draw_msg("You pressed right")
+        next_x = min (PLAYER.x + 1, GAME_WIDTH - 1)
+        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
+        GAME_BOARD.set_el(next_x, PLAYER.y, PLAYER)
+
+    elif KEYBOARD[key.LEFT]:
+        GAME_BOARD.draw_msg("You pressed left")
+        next_x = max (PLAYER.x - 1, 0)
+        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
+        GAME_BOARD.set_el(next_x, PLAYER.y, PLAYER)
+
+    elif KEYBOARD[key.QUESTION]:
+        GAME_BOARD.draw_msg("Sorry you are beyond help")
+    elif KEYBOARD[key.SPACE]:
+        GAME_BOARD.erase_msg()
+
+
+
