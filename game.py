@@ -1,5 +1,6 @@
 import core
 import pyglet
+import random
 from pyglet.window import key
 from core import GameElement
 import sys
@@ -56,7 +57,20 @@ class EnergyBar (GameElement):
 def initialize():
     """Put game initialization code here"""
 
-    obstacle_positions = [(3,1), (1,2), (3, 2), (2, 4)]
+   # obstacle_positions = [(3,1), (1,2), (3, 2), (2, 4)]
+
+    obstacle_positions =[]
+
+    #  THIS BELOW NEEDS SORTING OUT
+    # total= ((GAME_HEIGHT-2)* (GAME_WIDTH))/3
+
+    # x_range = range(0, GAME_WIDTH)
+    # y_range = range(1, GAME_HEIGHT-1)
+
+    # for obs in range(total):
+    #     x_coor = random.choice(x_range)
+    #     y_coor = random.choice(y_range)
+    #     obstacle_positions[obs] = (x_coor, y_coor)
 
     obstacles=[]
     for pos in obstacle_positions:
