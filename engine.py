@@ -4,8 +4,8 @@ import pyglet
 from pyglet.window import key
 from core import GameElement
 
-SCREEN_X = 800
-SCREEN_Y = 700
+SCREEN_X = 1400
+SCREEN_Y = 1050
 
 game_window = pyglet.window.Window(SCREEN_X, SCREEN_Y)
 
@@ -39,8 +39,10 @@ def setup_images():
             "Boy": "Character Boy.png",
             "Cat": "Character Cat Girl.png",
             "Horns": "Character Horn Girl.png",
+            "DirtBlock": "Dirt Block.png",
             "Girl": "Character Pink Girl.png",
             "Princess": "Character Princess Girl.png"
+
             }
 
     for k,v in filenames.items():
@@ -48,10 +50,12 @@ def setup_images():
 #        i.anchor_x = i.width/2
         i.anchor_y = i.height
         IMAGES[k] = i
+        print k,v,i.height, i.width
 
     global TILE_WIDTH, TILE_HEIGHT
     TILE_WIDTH = i.width
     TILE_HEIGHT = i.height
+
 
 class Board(object):
     def __init__(self, width = 3, height = 3):
@@ -69,13 +73,15 @@ class Board(object):
 
         # Make a map with a stoneblock border and filled with grass
         game_map = []
-        inner_width = width-2
+#        inner_width = width-2
         for i in range(height):
             if i == 0 or i == height-1:
                 # On the boundaries
-                game_map.append(["Block"] * width)
+                game_map.append(["GrassBlock"] * width)
             else:
-                row = ["Block"] + (["GrassBlock"] * inner_width) + ["Block"]
+#                row = ["GrassBlock"] + (["DirtBlock"] * inner_width) + ["GrassBlock"]
+                row = ["DirtBlock"] * width
+
                 game_map.append(row)
         
         self.base_board = game_map

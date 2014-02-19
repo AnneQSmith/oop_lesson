@@ -11,15 +11,20 @@ KEYBOARD = None
 PLAYER = None
 ######################
 
-GAME_WIDTH = 5
-GAME_HEIGHT = 5
+GAME_WIDTH = 9
+GAME_HEIGHT = 12
 
 #### Put class definitions here ####
-class Rock(GameElement):
+class Obstacle (GameElement):
     IMAGE = 'Rock'
+    SOLID = True
 
 class Character(GameElement):
     IMAGE = "Horns"
+
+    def __init__(self):
+        GameElement.__init__(self)
+        self.inventory = 25*['E']
 
     def next_pos(self, direction):
         if direction == 'up':
@@ -34,33 +39,53 @@ class Character(GameElement):
 
 
 
+class EnergyBar (GameElement):
+    IMAGE = "BlueGem"
+    SOLID = False
+
+    def interact(self, player):
+#TODO fix this
+        player.inventory.append(self)
+        player.inventory.append(self)
+        player.inventory.append(self)
+        GAME_BOARD.draw_msg(("You just ate an energy bar! You have %r units of energy left!") % (len(player.inventory)))
+
+
 ####   End class definitions    ####
 
 def initialize():
     """Put game initialization code here"""
 
-    rock_positions = [(2,1), (1,2), (3, 2), (2, 3)]
+    obstacle_positions = [(3,1), (1,2), (3, 2), (2, 4)]
 
-    rocks=[]
+    obstacles=[]
+    for pos in obstacle_positions:
+        obstacle = Obstacle()
 
-    for pos in rock_positions:
-        rock =Rock()
+        GAME_BOARD.register(obstacle)
+        GAME_BOARD.set_el(pos[0], pos[1], obstacle)
+        obstacles.append(obstacle)
 
-        GAME_BOARD.register(rock)
-        GAME_BOARD.set_el(pos[0], pos[1], rock)
-        rocks.append(rock)
-
-    for rock in rocks:
-        print rock 
+    for obstacle in obstacles:
+        print obstacle 
 
     global PLAYER
     PLAYER = Character()
     GAME_BOARD.register(PLAYER)
-    GAME_BOARD.set_el(2, 2, PLAYER)
+    GAME_BOARD.set_el(4, 11, PLAYER)
     print PLAYER
 
 
     GAME_BOARD.draw_msg("This game is wicked awesome.")
+
+    energyBar = EnergyBar()
+    GAME_BOARD.register(energyBar)
+    GAME_BOARD.set_el(6, 9, energyBar)
+
+
+
+
+
 
 
 def keyboard_handler():
@@ -84,10 +109,35 @@ def keyboard_handler():
     elif KEYBOARD[key.SPACE]:
         GAME_BOARD.erase_msg()
 
-    if direction:
-        next_location = PLAYER.next_pos(direction)
-        next_x = next_location[0]
-        next_y = next_location[1]
 
-        GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
-        GAME_BOARD.set_el(next_x, next_y, PLAYER)
+    if direction:
+
+          
+        if len(PLAYER.inventory) >= 1:
+            PLAYER.inventory.pop()
+        
+            GAME_BOARD.draw_msg("You only have %d units of energy left" % (len(PLAYER.inventory)))
+            next_location = PLAYER.next_pos(direction)
+            next_x = next_location[0]
+            next_y = next_location[1]
+
+            existing_el = GAME_BOARD.get_el(next_x,next_y)
+
+            if existing_el:
+                existing_el.interact(PLAYER)
+
+
+            if existing_el is None or not existing_el.SOLID:
+
+                GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
+                GAME_BOARD.set_el(next_x, next_y, PLAYER)
+
+                if next_y == 0:
+                    GAME_BOARD.draw_msg("YOU GOT TO THE SUMMIT!")
+
+
+        else:
+            GAME_BOARD.draw_msg("You have no energy left; you fall to your death")
+            
+
+
