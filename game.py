@@ -11,11 +11,13 @@ GAME_BOARD = None
 DEBUG = False
 KEYBOARD = None
 PLAYER = None
+ANCHOR = None
 ######################
 
 GAME_WIDTH = 9
 GAME_HEIGHT = 12
 INITIAL_DELAY = .5
+
 
 #### Put class definitions here ####
 class Obstacle (GameElement):
@@ -27,12 +29,15 @@ class Corpse(GameElement):
     IMAGE = "Bug"
 
 
+class Anchor (GameElement):
+    IMAGE = "Star"
+
 class Character(GameElement):
     IMAGE = "Horns"
 
     def __init__(self):
         GameElement.__init__(self)
-        self.inventory = 10*['E']
+        self.inventory = 20*['E']
         self.counter = 0
         self.accel = 1
 
@@ -134,7 +139,7 @@ def initialize():
     print PLAYER
 
 
-    GAME_BOARD.draw_msg("This game is wicked awesome.")
+    GAME_BOARD.draw_msg("Climbing is way more awesome than this game.  Try it!")
 
     
     energyBar_positions = []
@@ -159,6 +164,14 @@ def initialize():
         GAME_BOARD.set_el(position[0], position[1], energyBar)
         energyBars.append(energyBar)
 
+    global ANCHOR
+    ANCHOR = Anchor()
+    GAME_BOARD.register(ANCHOR)
+    gx = random.choice(range(GAME_WIDTH))
+    GAME_BOARD.set_el(gx,0,ANCHOR)
+    print type(ANCHOR)
+    print type(energyBar)
+    print type(PLAYER)
 
 
 def keyboard_handler():
@@ -210,9 +223,12 @@ def keyboard_handler():
 
                 GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
                 GAME_BOARD.set_el(next_x, next_y, PLAYER)
+                print PLAYER.x
+                if next_y == 0 and next_x == ANCHOR.x:
 
-                if next_y == 0:
-                    GAME_BOARD.draw_msg("YOU GOT TO THE SUMMIT!")
+                    GAME_BOARD.draw_msg("YOU GOT TO THE SUMMIT! ")
+                    direction = None
+
 
 
 

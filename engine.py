@@ -42,6 +42,7 @@ def setup_images():
             "DirtBlock": "Dirt Block.png",
             "Girl": "Character Pink Girl.png",
             "Princess": "Character Princess Girl.png",
+            "Star": "Star.png",
             "Bug": "Enemy Bug.png"
             }
 
