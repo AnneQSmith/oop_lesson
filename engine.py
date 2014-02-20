@@ -41,8 +41,8 @@ def setup_images():
             "Horns": "Character Horn Girl.png",
             "DirtBlock": "Dirt Block.png",
             "Girl": "Character Pink Girl.png",
-            "Princess": "Character Princess Girl.png"
-
+            "Princess": "Character Princess Girl.png",
+            "Bug": "Enemy Bug.png"
             }
 
     for k,v in filenames.items():
@@ -230,13 +230,13 @@ def run():
         handler = game.keyboard_handler
         def handler_wrapper(dt):
             handler()
-        pyglet.clock.schedule_interval(handler_wrapper, 1/10.0)
+        pyglet.clock.schedule_interval(handler_wrapper, 1/20.)
     except AttributeError:
         print "No keyboard handler"
         pass
         
     # Set up the update clock
-    pyglet.clock.schedule_interval(update, 1/10.)
+    pyglet.clock.schedule_interval(update, 1/30.)
     game.initialize()
     pyglet.app.run()
 
