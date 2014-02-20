@@ -47,12 +47,17 @@ class Character(GameElement):
             # if time to draw frame
             self.counter +=1
             if self.y < GAME_HEIGHT-1 and self.counter % (30/self.accel) == 0:
-                print self.counter, self.accel
                 self.accel +=1
                 self.counter = 1
                 GAME_BOARD.del_el(self.x, self.y)
                 self.y += 1
-                GAME_BOARD.set_el(self.x, self.y, self)
+                if self.y == GAME_HEIGHT-1:
+                    corpse = Corpse()
+                    GAME_BOARD.del_el(self.x, self.y)
+                    GAME_BOARD.register(corpse)
+                    GAME_BOARD.set_el(self.x,GAME_HEIGHT-1,corpse)    
+                else:
+                    GAME_BOARD.set_el(self.x, self.y, self)
 
 # def update(dt):
 #     for el in update_list:
@@ -183,11 +188,9 @@ def keyboard_handler():
         if len(PLAYER.inventory) ==  0:
             GAME_BOARD.draw_msg("You have no energy left; you fall to your death")
             print "We should be in a death spiral"
-            if PLAYER.y == GAME_HEIGHT-1:
-                corpse = Corpse()
-                print "we're in the loop"
-                GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
-                GAME_BOARD.set_el(PLAYER.x,0,corpse)          
+            print "player.y, game height-1",PLAYER.y,GAME_HEIGHT-1
+       
+      
     
         else:
             PLAYER.inventory.pop()
