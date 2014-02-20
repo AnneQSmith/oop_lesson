@@ -16,7 +16,7 @@ ANCHOR = None
 
 GAME_WIDTH = 9
 GAME_HEIGHT = 12
-INITIAL_DELAY = .5
+INITIAL_DELAY = .3
 
 
 #### Put class definitions here ####
@@ -37,7 +37,7 @@ class Character(GameElement):
 
     def __init__(self):
         GameElement.__init__(self)
-        self.inventory = 20*['E']
+        self.inventory = 12*['E']
         self.counter = 0
         self.accel = 1
 
@@ -51,7 +51,7 @@ class Character(GameElement):
             #fall!
             # if time to draw frame
             self.counter +=1
-            if self.y < GAME_HEIGHT-1 and self.counter % (30/self.accel) == 0:
+            if self.y < GAME_HEIGHT-1 and self.counter % (20/self.accel) == 0:
                 self.accel +=1
                 self.counter = 1
                 GAME_BOARD.del_el(self.x, self.y)
@@ -135,7 +135,7 @@ def initialize():
     global PLAYER
     PLAYER = Character()
     GAME_BOARD.register(PLAYER)
-    GAME_BOARD.set_el(4, 11, PLAYER)
+    GAME_BOARD.set_el(GAME_WIDTH/2, GAME_HEIGHT-1, PLAYER)
     print PLAYER
 
 
